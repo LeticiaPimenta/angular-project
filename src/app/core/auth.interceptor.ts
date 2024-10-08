@@ -1,28 +1,23 @@
-import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
+export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> => {
+  // Get the token from localStorage or another storage
+  const authToken = localStorage.getItem('authToken');
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Exclude the login request from adding the token
-    if (req.url.includes('/api/login')) {
-      return next.handle(req);
-    }
+  // Clone the request and add the Authorization header if the token exists
+  if (authToken) {
+    const authReq = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${authToken}`
+      }
+    });
 
-    // Get the token from localStorage or a service
-    const authToken = localStorage.getItem('authToken');
-
-    // Clone the request and add the Authorization header if the token exists
-    let authReq = req;
-    if (authToken) {
-      authReq = req.clone({
-        headers: req.headers.set('Authorization', `Bearer ${authToken}`)
-      });
-    }
-
-    // Pass the cloned request to the next handler
-    return next.handle(authReq);
+    // Call the next handler with the cloned request
+    return next(authReq);
   }
-}
+
+  // If no token, just pass the request as is
+  return next(req);
+};
