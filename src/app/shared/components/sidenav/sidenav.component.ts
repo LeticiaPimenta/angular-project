@@ -6,13 +6,15 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sidenav',
   standalone: true,
   imports: [
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule
   ],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.css'
@@ -20,8 +22,8 @@ import { MatDividerModule } from '@angular/material/divider';
 export class SidenavComponent {
   
  menuItems = [
-  { label: 'Home', icon: 'home', active: true },
-  { label: 'Login', icon: 'login', active: false },
+  { label: 'Home', icon: 'home', link: '/home', active: true },
+  { label: 'Login', icon: 'login', link: '/login', active: false },
   // Add more items as needed
 ];
 

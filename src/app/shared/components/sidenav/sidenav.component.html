@@ -5,7 +5,11 @@
                 <div class="sidenav-icon" *ngIf="item.icon">
                     <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="{{item.icon}}"></mat-icon>
                 </div>
-                <div class="sidenav-label">{{ item.label }}</div>
+                <div class="sidenav-label">
+                    <a [routerLink]="item.link" routerLinkActive="router-link-active" >
+                        {{ item.label }}
+                    </a>
+                </div>
             </div>
         </div>
     </div>
